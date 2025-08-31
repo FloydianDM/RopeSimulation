@@ -56,6 +56,7 @@ public class VerletRope : MonoBehaviour
         _lineRenderer.positionCount = _ropeSegmentCount;
 
         _startPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        _mousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
 
         for (int i = 0; i < _ropeSegmentCount; i++)
         {
@@ -68,8 +69,14 @@ public class VerletRope : MonoBehaviour
 
     private void Update()
     {
+        GetInputs();
         AttachToHinge();
         DrawRope();
+    }
+
+    private void GetInputs()
+    {
+        _mousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
     }
 
     private void FixedUpdate()
@@ -101,9 +108,7 @@ public class VerletRope : MonoBehaviour
         }
 
         // check if the mouse position is in the hinge bounds
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-
-        if (_hinge.HingeBounds.min.x < mousePosition.x && _hinge.HingeBounds.max.x > mousePosition.x && _hinge.HingeBounds.min.y < mousePosition.y && mousePosition.y < _hinge.HingeBounds.max.y)
+        if (_hinge.HingeBounds.min.x < _mousePosition.x && _hinge.HingeBounds.max.x > _mousePosition.x && _hinge.HingeBounds.min.y < _mousePosition.y && _mousePosition.y < _hinge.HingeBounds.max.y)
         {
             _isAttachedToHinge = true;
             _currentHingePosition = _hingeTransform.position;
@@ -150,7 +155,7 @@ public class VerletRope : MonoBehaviour
         else
         {
             // keep first point attached to the mouse position
-            firstSegment.CurrentPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+            firstSegment.CurrentPosition = _mousePosition;
         }
 
         _ropeSegments[0] = firstSegment;
