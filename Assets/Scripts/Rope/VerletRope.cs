@@ -74,6 +74,15 @@ public class VerletRope : MonoBehaviour
     private void GetInputs()
     {
         _mousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+
+        if (_isAttachedToHinge)
+        {
+            if (Mouse.current.leftButton.isPressed)
+            {
+                // release the rope
+                _isAttachedToHinge = false;
+            }
+        }
     }
 
     private void FixedUpdate()
