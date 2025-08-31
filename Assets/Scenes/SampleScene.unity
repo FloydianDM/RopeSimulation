@@ -499,8 +499,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RopeSimulator
   _ropeSegmentCount: 20
   _segmentLength: 0.225
-  _gravityForce: {x: 0, y: -9.98}
-  _airDampingFactor: 0.95
+  _gravityForce: {x: 0, y: -0.1}
+  _airDampingFactor: 0.9
   _iterationCount: 50
 --- !u!4 &772897150
 Transform:

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -169,8 +170,8 @@ public class VerletRope : MonoBehaviour
         }
         else
         {
-            // keep first point attached to the mouse position
-            firstSegment.CurrentPosition = _mousePosition;
+            // free fall
+            firstSegment.CurrentPosition += 0.5f * MathF.Pow(Time.fixedDeltaTime, 2) * _gravityForce;
         }
 
         _ropeSegments[0] = firstSegment;
