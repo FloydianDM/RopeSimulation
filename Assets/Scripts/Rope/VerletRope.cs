@@ -17,16 +17,13 @@ public class VerletRope : MonoBehaviour
     // constraints
     [SerializeField] private int _iterationCount = 50;
 
-    // hinge
-    [SerializeField] private Transform _hingeTransform;
-
     private LineRenderer _lineRenderer;
     private readonly List<RopeSegment> _ropeSegments = new List<RopeSegment>();
     private Vector2 _startPosition;
     private Vector2 _currentHingePosition;
     private Vector2 _mousePosition;
     private bool _isAttachedToHinge = false;
-    private Hinge _hinge;
+    private readonly List<Hinge> _hinges = new List<Hinge>();
 
     public struct RopeSegment
     {
@@ -64,7 +61,7 @@ public class VerletRope : MonoBehaviour
             _startPosition.y -= _segmentLength;
         }
 
-        GetHingePoints();
+        GetHinges();
     }
 
     private void Update()
@@ -90,14 +87,20 @@ public class VerletRope : MonoBehaviour
         }
     }
 
-    private void GetHingePoints()
+    private void GetHinges()
     {
-        // get hinge collider
-        CircleCollider2D hingeCol = _hingeTransform.GetComponent<CircleCollider2D>();
+        // get all the hinge objects in scene
+        GameObject[] hingeArray = GameObject.FindGameObjectsWithTag("Hinge");
 
-        Bounds hingeBounds = hingeCol.bounds;
+        foreach (GameObject hingeObject in hingeArray)
+        {
+            // get hinge collider
+            CircleCollider2D hingeCol = hingeObject.GetComponent<CircleCollider2D>();
+            Bounds hingeBounds = hingeCol.bounds;
 
-        _hinge = new Hinge(hingeBounds);
+            Hinge hinge = new Hinge(hingeBounds);
+            _hinges.Add(hinge);
+        }
     }
 
     private void AttachToHinge()
@@ -107,11 +110,14 @@ public class VerletRope : MonoBehaviour
             return;
         }
 
-        // check if the mouse position is in the hinge bounds
-        if (_hinge.HingeBounds.min.x < _mousePosition.x && _hinge.HingeBounds.max.x > _mousePosition.x && _hinge.HingeBounds.min.y < _mousePosition.y && _mousePosition.y < _hinge.HingeBounds.max.y)
+        foreach (Hinge hinge in _hinges)
         {
-            _isAttachedToHinge = true;
-            _currentHingePosition = _hingeTransform.position;
+            // check if the mouse position is in the hinge bounds
+            if (hinge.HingeBounds.min.x < _mousePosition.x && hinge.HingeBounds.max.x > _mousePosition.x && hinge.HingeBounds.min.y < _mousePosition.y && _mousePosition.y < hinge.HingeBounds.max.y)
+            {
+                _isAttachedToHinge = true;
+                _currentHingePosition = hinge.HingeBounds.center;
+            }
         }
     }
 
