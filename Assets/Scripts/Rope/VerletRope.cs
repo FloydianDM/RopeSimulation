@@ -170,8 +170,10 @@ public class VerletRope : MonoBehaviour
         }
         else
         {
+            firstSegment.CurrentPosition = _mousePosition;
+
             // free fall
-            firstSegment.CurrentPosition += 0.5f * MathF.Pow(Time.fixedDeltaTime, 2) * _gravityForce;
+            //firstSegment.CurrentPosition += 0.5f * MathF.Pow(Time.fixedDeltaTime, 2) * _gravityForce;
         }
 
         _ropeSegments[0] = firstSegment;
